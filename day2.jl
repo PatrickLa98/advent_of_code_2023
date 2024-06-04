@@ -78,27 +78,26 @@ for i in 1: length(games)
   game = games[i]
   rounds = split(game, ';')
 
-for j in 1:length(rounds)
+  for j in 1:length(rounds)
 
-  round = rounds[j]
-  colors = split(round, ',')
+    round = rounds[j]
+    colors = split(round, ',')
 
-  for k in 1:length(colors)
+    for k in 1:length(colors)
 
-    color = colors[k]
-    n, col = split(color)
+      color = colors[k]
+      n, col = split(color)
 
-    temp = DataFrame(game_ID = i, round = j, color = col, n = parse(Int64,n))
-    df = [df; temp]
+      temp = DataFrame(game_ID = i, round = j, color = col, n = parse(Int64,n))
+      df = [df; temp]
+    end
   end
 end
-end
-
 
 ## trying out Chain and DataFrame package for data wrangling
 ## filtering for maximum draws per color per game
 ## multiply the max draws per color per game
-## some those products across games
+## sum up products across games
 
 using Chain
 @chain df begin
