@@ -1,7 +1,7 @@
 ## 1. format as matrix
 ## 2. loop through each entry and check for neighbors
 ## 3. create second matrix that saves information if neighbors are anything other than "." or a number
-## 4. compare neighborinfo matrix with input matrix and keep every number that has a symbol as neighbor as well as the numbers next to that partikular number
+## 4. compare neighborinfo matrix with input matrix and keep every number that has a symbol as neighbor as well as the numbers next to that particular number
 
 cd("/Users/patricklauer/Documents/GitHub/advent_of_code_2023/")
 using DelimitedFiles
@@ -103,7 +103,7 @@ end
 
 ## get results
 
-result = ["filler"] ## create filler so the last() function in second if statements works
+result = ["filler"] ## create filler as starting value
 
 ## keep track of the vertical and horizontal positions
 horizontal_position_number = [0]
