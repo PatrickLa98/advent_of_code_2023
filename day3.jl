@@ -5,7 +5,7 @@
 
 cd("/Users/patricklauer/Documents/GitHub/advent_of_code_2023/")
 using DelimitedFiles
-engine = readdlm("day3_input.txt")
+engine = readdlm("day3_input.txt", '\n')
 
 
 ## 1. Transform input to a matrix
@@ -104,6 +104,10 @@ end
 ## get results
 
 result = ["filler"] ## create filler so the last() function in second if statements works
+
+## keep track of the vertical and horizontal positions
+horizontal_position_number = [0]
+vertical_position_number = [0]
 for i in 1:length(matrix[:,1])
     for j in 1:length(matrix[1,:])
 
@@ -111,10 +115,12 @@ for i in 1:length(matrix[:,1])
             
             temp = get_numbers_beside(matrix, i, j)
             temp = string.(temp) # reformat numbers, this is needed for 1 digit numbers as they are in this weird format: SCII/Unicode U+0032 (
-            if temp != last(result)  # only include number if it differs from number created before, to avoid duplicates due to two connections to symbols
-                push!(result, temp)
+            
+            if  j - last(horizontal_position_number) >= 2 || i != last(vertical_position_number)  # only include number if the previous created number is not located directly next to it (to avoid duplicated numbers created by 2 digits next to symbol)
+             push!(result, temp)
             end
-
+            push!(horizontal_position_number, j)
+            push!(vertical_position_number, i)
         end
     end
 end
@@ -125,5 +131,4 @@ result = filter!(x -> x != "filler", result)
 ## sum up all numbers
 sum(parse.(Int64, result))
 
-## wrong answer 1 possibility might be that i just filter out consecutive duplicated number to prevent a number being counted twice if it touches a symbol twice.
-## But there is also the possibility that there are actually two independet numbers with the same value
+
