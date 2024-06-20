@@ -3,7 +3,7 @@ using DataFrames
 
 ## Part A
 
-# Read file
+## Read file
 cd("/Users/patricklauer/Documents/GitHub/advent_of_code_2023/")
 lines = readlines("day4_input.txt")
 
@@ -30,7 +30,7 @@ cards.wins = zeros(Int64, length(cards.card))
 cards.points = zeros(Int64, length(cards.card))
 ## loop through cards
 for i in 1: length(cards.card)
-    wins = 0  #reset wins after each card
+    wins = 0  # reset wins after each card
     for j in 1: length(cards.winning_numbers[i])
         
         if cards.winning_numbers[i][j] in cards.your_numbers[i]
@@ -41,7 +41,7 @@ for i in 1: length(cards.card)
 
    cards.wins[i] = wins
     if wins != 0
-     cards.points[i] = 2^(wins - 1) ## safe points, since 1 win is one point and then doubles, it follows the exponential
+     cards.points[i] = 2^(wins - 1) # safe points, since 1 win is one point and then doubles, it follows the exponential
     else
      cards.points[i] = 0
     end
@@ -53,11 +53,11 @@ println(sum(cards.points))
 
 ## Part B
 
-# 1.
-##create a dictionary containing card win information
+## create a dictionary containing card win information
 wins = cards.wins
 card = collect(1:nrow(cards))
 card_win = Dict(card .=> wins)
+
 ## create a vector that counts the number of cards 
 ## initiated with 1 copy per card
 n_cards = ones(Int, length(card))
@@ -73,8 +73,8 @@ sum(n_cards)
 
 
 ## First version
-
 ## DOES NOT WORK: Just keeps on evaluating, worked on simplified example (probably to slow to iterate and fullcopy all the cards)
+
 cardsB = [card wins]
 
 ## Initiate
@@ -83,7 +83,7 @@ max_iteration = length(card)
 
 while i <= max_iteration
     
-        wins = cardsB[i, 2] ## the wins are stored at the 2nd index of the matrix
+        wins = cardsB[i, 2] # the wins are stored at the 2nd index of the matrix
 
     for j in 0:wins
 
@@ -93,7 +93,7 @@ while i <= max_iteration
         
         ## which card is copied (depends on the initial card i (stored in 1st index of matrix) and the iteration of j)
         copy_card = cardsB[i, 1] + j
-            if copy_card >= maximum(card) + 1  ## stop the copying process at max copyable card (my input contains 197 cards)
+            if copy_card >= maximum(card) + 1  # stop the copying process at max copyable card (my input contains 197 cards)
               continue
             end 
            
