@@ -39,7 +39,7 @@ for i in 1: length(cards.card)
         end
     end
 
-cards.wins[i] = wins
+   cards.wins[i] = wins
     if wins != 0
      cards.points[i] = 2^(wins - 1) ## safe points, since 1 win is one point and then doubles, it follows the exponential
     else
@@ -53,33 +53,64 @@ println(sum(cards.points))
 
 ## Part B
 
-### PRELIMINARY, DOES NOT WORK YET
+# 1.
+##create a dictionary containing card win information
+wins = cards.wins
+card = collect(1:nrow(cards))
+card_win = Dict(card .=> wins)
+## create a vector that counts the number of cards 
+## initiated with 1 copy per card
+n_cards = ones(Int, length(card))
 
-##1. go through every card
-## duplicate subsequent cards (n subsequent cards -> according to wins of focal)
-## place the duplicated cards below the original of the respective value of subsequent cards
+## add copies to card 
+for i in 1:(length(card)-1)
+    n_win =  card_win[i]
+    n_cards[i+1:i+n_win] .+= n_cards[i]
+end
+
+sum(n_cards)
 
 
-# recreate card column as integers to be able to perform + operations subsequently
-cards.card = 1:length(cards.wins)
 
-for i in 1: length(cards.card)
-    for j in 0:cards[i, :].wins
+## First version
+
+## DOES NOT WORK: Just keeps on evaluating, worked on simplified example (probably to slow to iterate and fullcopy all the cards)
+cardsB = [card wins]
+
+## Initiate
+i = 1
+max_iteration = length(card)
+
+while i <= max_iteration
+    
+        wins = cardsB[i, 2] ## the wins are stored at the 2nd index of the matrix
+
+    for j in 0:wins
 
         if j == 0 # dont duplicate any cards if no wins
          continue
-         else
-         ## i + j means the focal card + sequence of wins e.g. if focal card1 (i = 1) and second we are sequencing through the second win (j = 2), we duplicate card3
-    
-          temp =  cards[cards[i, :].card + j, :] # carts will shift once we insert copies. This specifies to create dublicate the value of the higher card (value) compared to our focal card i. Value of duplicate dependent on sequency of wins j
-
-          position = (findfirst(row -> row.card == temp.card, eachrow(cards))) + 1 # insert new row after the first occurence of the respective card value
-    
-          insert!(cards, position, temp)
         end
+        
+        ## which card is copied (depends on the initial card i (stored in 1st index of matrix) and the iteration of j)
+        copy_card = cardsB[i, 1] + j
+            if copy_card >= maximum(card) + 1  ## stop the copying process at max copyable card (my input contains 197 cards)
+              continue
+            end 
+           
+           ## How many wins does the card to be copyed contain
+           copy_wins = cardsB[copy_card,2]
+
+        ## add copied card to matrix
+            copy = [copy_card  copy_wins]
+            cardsB = vcat(cardsB, copy)
+
     end
+ i += 1
+ max_iteration = length(cardsB[:,1])
+
 end
 
-length(cards.card)
+length(cardsB[:,1])
 
-## seems to just copy card 2 many many times!!!11!
+
+
