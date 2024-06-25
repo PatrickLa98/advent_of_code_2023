@@ -22,7 +22,7 @@ map
 ## third column = location if right step    
 
 
-##while loop through matrix till it reaches ZZZ and keep track of steps
+## while loop through matrix till it reaches ZZZ and keep track of steps
 directions = repeat(directions, 100) 
 location = "AAA"
 steps = 0
@@ -42,3 +42,49 @@ while location != "ZZZ"
         steps += 1
     end
 end
+
+
+## Part B
+
+## loop through all elements that end with A and track the steps they need to reach ZZZ
+## find least common multiplicate of the steps 
+
+count_steps = function(map, direction, location)
+
+    steps = 0
+
+    while endswith.(location, "Z") != true
+     
+        i = findall( x -> x == 1, map[:,1] .== location) ## find the row in which the correct location is in the matrix
+    
+        if directions[steps+1] == 'L'
+
+            location = map[i,2][1]
+
+         elseif directions[steps+1] == 'R'
+    
+            location = map[i,3][1]
+        end
+
+        steps += 1
+
+    end
+    return steps
+end
+
+
+directions = repeat(directions, 100000) 
+locations = String.([s for s in map[:,1] if endswith(s, "A")])
+all_steps = []
+
+
+for i in 1:length(locations)
+
+    push!(all_steps, count_steps(map, directions, locations[i]))
+
+end
+
+all_steps
+
+## find least common multiplicate
+reduce(lcm, all_steps)
