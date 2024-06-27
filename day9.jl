@@ -51,3 +51,4 @@ sum(next_number)
 ## wrong solution
 ## dont know what is causing it, works with sample example
 
+next_number
