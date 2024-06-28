@@ -392,3 +392,58 @@ for i in 1:length(seeds)
 end
 
 minimum(final_location)
+
+
+## Part B
+
+## separte seeds vector by even and odd indexes
+start = [value for (index, value) in enumerate(seeds) if index % 2 != 0]
+ranges = [value for (index, value) in enumerate(seeds) if index % 2 == 0]
+
+seeds_partB = collect(range(start[1], length = ranges[1]))
+for i in 2: length(start)
+
+   vcat(seeds_partB, collect(range(start[i], length = ranges[i])))
+
+end
+
+## loop through seeds and perform converion for every category 
+
+final_location = []
+
+for i in 1:length(seeds_partB)
+
+    seed = seeds_partB[i]
+   
+    ## seed to soil
+
+   seed = conversion(df_seed_to_soil, seed)
+
+    ## soil to fertilizer
+   
+    seed = conversion(df_soil_to_fertilizer, seed)
+
+      ## fertilizer to water
+  
+      seed = conversion(df_fertilizer_to_water, seed)
+
+    ## water to light
+
+    seed = conversion(df_water_to_light, seed)
+
+     ## light to temperature
+   
+     seed = conversion(df_light_to_temperature, seed)
+
+     ## temperature to humidity
+
+     seed = conversion(df_temperature_to_humidity, seed)
+
+     ## humidity to location
+
+     seed = conversion(df_humidity_to_location, seed)
+
+     push!(final_location, seed)
+
+
+end
