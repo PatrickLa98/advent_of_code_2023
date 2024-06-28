@@ -1,6 +1,6 @@
 ## 1. put input in seperate vectors for each conversion
 ## 2. create conversion sequences and save all information in convenient data structure 
-## 3. find lowest end location value
+## 3. convert seeds and find lowest end location value
 
 
 ## 1. clean up input and store different conversions in seperate vectors
@@ -53,237 +53,342 @@ humidity_to_location
 ## 2 column = source range start
 ## 3 range length
 
-## 2. store all information in a DataFrame
+## 2. store information of source ranges in dataframe (1 df for each conversion)
 
+## clean up by writing function!!
 
-## DOES NOT WORK, way to slow 
-## INSTEAD ONLY SAVE MIN AND MAX OF EACH RANGE AND CHECK IF SEED IS WITHIN, convertion according to in whcih range the seed is using if else statements
-
+using DataFrames
 
 ## seed to soil
 
-full_source_range = Int[]
-full_destination = Int[]
+df_seed_to_soil = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
-#for i in 1:length(seed_to_soil)
+for i in 1:length(seed_to_soil)
 
     source_range = range(seed_to_soil[i][2], length = seed_to_soil[i][3])
-    corresponding_destination = collect(range(seed_to_soil[i][1], length = seed_to_soil[i][3]))
+    corresponding_destination = range(seed_to_soil[i][1], length = seed_to_soil[i][3])
     
-    full_source_range = [full_source_range, source_range]
-    full_destination = vcat(full_destination, corresponding_destination)
-#end
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "seed_to_soil",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_seed_to_soil = vcat(df_seed_to_soil, temp)
+end
 
 
 
 ## soil to fertilizer
 
-full_source_range = Int[]
-full_destination = Int[]
+df_soil_to_fertilizer = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(soil_to_fertilizer)
 
-
-    source_range = collect(range(soil_to_fertilizer[i][2], length = soil_to_fertilizer[i][3]))
-    corresponding_destination = collect(range(soil_to_fertilizer[i][1], length = soil_to_fertilizer[i][3]))
+    source_range = range(soil_to_fertilizer[i][2], length = soil_to_fertilizer[i][3])
+    corresponding_destination = range(soil_to_fertilizer[i][1], length = soil_to_fertilizer[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "soil_to_fertilizer",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_soil_to_fertilizer = vcat(df_soil_to_fertilizer, temp)
 end
 
-temp = DataFrame(conversion = "soil_to_fertilizer",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
 
 ## fertilizer_to_water
-
-full_source_range = Int[]
-full_destination = Int[]
+df_fertilizer_to_water = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(fertilizer_to_water)
 
-    source_range = collect(range(fertilizer_to_water[i][2], length = fertilizer_to_water[i][3]))
-    corresponding_destination = collect(range(fertilizer_to_water[i][1], length = fertilizer_to_water[i][3]))
+    source_range = range(fertilizer_to_water[i][2], length = fertilizer_to_water[i][3])
+    corresponding_destination = range(fertilizer_to_water[i][1], length = fertilizer_to_water[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "fertilizer_to_water",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_fertilizer_to_water = vcat(df_fertilizer_to_water, temp)
 end
 
-temp = DataFrame(conversion = "fertilizer_to_water",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
-
 ## water_to_light
-
-full_source_range = Int[]
-full_destination = Int[]
+df_water_to_light = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(water_to_light)
 
-    source_range = collect(range(water_to_light[i][2], length = water_to_light[i][3]))
-    corresponding_destination = collect(range(water_to_light[i][1], length = water_to_light[i][3]))
+    source_range = range(water_to_light[i][2], length = water_to_light[i][3])
+    corresponding_destination = range(water_to_light[i][1], length = water_to_light[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "water_to_light",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_water_to_light = vcat(df_water_to_light, temp)
 end
 
-temp = DataFrame(conversion = "water_to_light",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
-
 ## light_to_temperature
-
-full_source_range = Int[]
-full_destination = Int[]
+df_light_to_temperature = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(light_to_temperature)
 
-    source_range = collect(range(light_to_temperature[i][2], length = light_to_temperature[i][3]))
-    corresponding_destination = collect(range(light_to_temperature[i][1], length = light_to_temperature[i][3]))
+    source_range = range(light_to_temperature[i][2], length = light_to_temperature[i][3])
+    corresponding_destination = range(light_to_temperature[i][1], length = light_to_temperature[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "light_to_temperature",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_light_to_temperature = vcat(df_light_to_temperature, temp)
 end
 
-temp = DataFrame(conversion = "light_to_temperature",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
-
 ## temperature_to_humidity
-
-full_source_range = Int[]
-full_destination = Int[]
+df_temperature_to_humidity = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(temperature_to_humidity)
 
-    source_range = collect(range(temperature_to_humidity[i][2], length = temperature_to_humidity[i][3]))
-    corresponding_destination = collect(range(temperature_to_humidity[i][1], length = temperature_to_humidity[i][3]))
+    source_range = range(temperature_to_humidity[i][2], length = temperature_to_humidity[i][3])
+    corresponding_destination = range(temperature_to_humidity[i][1], length = temperature_to_humidity[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "temperature_to_humidity",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_temperature_to_humidity = vcat(df_temperature_to_humidity, temp)
 end
 
-temp = DataFrame(conversion = "temperature_to_humidity",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
-
 ## humidity_to_location
-
-full_source_range = Int[]
-full_destination = Int[]
+df_humidity_to_location = DataFrame(conversion = [],
+               source_start = [],
+               source_end = [],
+               destination_start =[],
+               destination_end = [])
 
 for i in 1:length(humidity_to_location)
 
-    source_range = collect(range(humidity_to_location[i][2], length = humidity_to_location[i][3]))
-    corresponding_destination = collect(range(humidity_to_location[i][1], length = humidity_to_location[i][3]))
+    source_range = range(humidity_to_location[i][2], length = humidity_to_location[i][3])
+    corresponding_destination = range(humidity_to_location[i][1], length = humidity_to_location[i][3])
     
-    full_source_range = vcat(full_source_range, source_range)
-    full_destination = vcat(full_destination, corresponding_destination)
-end
+    if length(source_range) == 1 ## if range only includes 1 location
+        source_start = source_range[1]
+        source_end = source_range[1]
 
-temp = DataFrame(conversion = "humidity_to_location",
-          source = full_source_range, 
-          destination = full_destination)
-           
-df = vcat(df, temp)
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[1]
+
+    
+    else
+        source_start = source_range[1]
+        source_end = source_range[end]
+
+        destination_start = corresponding_destination[1]
+        destination_end = corresponding_destination[end]
+    end
+
+    temp =  DataFrame(conversion = "humidity_to_location",
+    source_start = source_start,
+    source_end = source_end,
+    destination_start = destination_start,
+    destination_end = destination_end)
+    
+    df_humidity_to_location = vcat(df_humidity_to_location, temp)
+end
 
 ## 3. find locations for seeds
 
-i = 1
+## function that converts seed from 1 category to the next by looping through converion ranges and transforming seeds if a matching range is found
+conversion = function(df, seed)
+   
+    ## when not in range transformed seed stays the same
+    seed_transformed = seed
+   
+    for j in 1:nrow(df) 
+ 
+         ## if the seed is in range convert it to destination location
+         if seed >= df[j,:].source_start && seed <= df[j,:].source_end
+ 
+             ## conversion factor
+             conversion_factor = df[j,:].source_start - df[j,:].destination_start
+ 
+            seed_transformed = seed - conversion_factor
+         
+             ## if not in range continue
+         else 
+            
+         end
+     end
+
+     return seed_transformed
+end
+
 
 final_location = []
 
+## loop through seeds and perform converion for every category 
 for i in 1:length(seeds)
 
-    df_sub = filter(row -> row.conversion == "seed_to_soil", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
+    seed = seeds[i]
+   
+    ## seed to soil
 
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
+   seed = conversion(df_seed_to_soil, seed)
 
-    end
+    ## soil to fertilizer
+   
+    seed = conversion(df_soil_to_fertilizer, seed)
 
-    df_sub = filter(row -> row.conversion == "soil_to_fertilizer", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
+      ## fertilizer to water
+  
+      seed = conversion(df_fertilizer_to_water, seed)
 
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
+    ## water to light
 
-    end
+    seed = conversion(df_water_to_light, seed)
 
-    df_sub = filter(row -> row.conversion == "fertilizer_to_water", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
+     ## light to temperature
+   
+     seed = conversion(df_light_to_temperature, seed)
 
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
+     ## temperature to humidity
 
-    end
+     seed = conversion(df_temperature_to_humidity, seed)
 
-    df_sub = filter(row -> row.conversion == "water_to_light", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
+     ## humidity to location
 
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
+     seed = conversion(df_humidity_to_location, seed)
 
-    end
+     push!(final_location, seed)
 
-    df_sub = filter(row -> row.conversion == "light_to_temperature", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
-
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
-
-    end
-
-    df_sub = filter(row -> row.conversion == "temperature_to_humidity", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
-
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
-
-    end
-
-    df_sub = filter(row -> row.conversion == "humidity_to_location", df)
-    ## if the seed is in range convert it to destination location
-    if seeds[i] in df_sub.source
-
-        seeds[i] = filter(row -> row.source == seeds[i], df_sub).destination[1]
-    
-        ## if not in range just leave the source value as the destination value 
-    else 
-
-    end
-
-    push!(final_location, seeds[i])
 
 end
 
-final_location
+minimum(final_location)
